@@ -19,8 +19,9 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'total'   => $this->faker->randomFloat(2, 20, 500),
-            'status'  => $this->faker->randomElement(['pending', 'shipped', 'completed']),
+            'total'   => $this->faker->randomFloat(2, 20, 500), // 20 dan 500 gacha tasodifiy onlik raqam
+            'status'  => $this->faker->randomElement(['pending', 'completed', 'cancelled']), // Status qiymatlari
         ];
     }
+
 }

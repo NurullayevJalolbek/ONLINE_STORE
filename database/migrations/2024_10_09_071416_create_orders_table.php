@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('total');
-            $table->enum('status', ['pending', 'completed', 'cancelled']);
+            $table->integer('total'); // Bu yerdagi total uchun decimal foydalanish tavsiya etiladi
+            $table->enum('status', ['pending', 'completed', 'cancelled']); // Status ustuni ENUM
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

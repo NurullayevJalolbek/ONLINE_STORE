@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class UserController extends Controller
     public function index(): \Illuminate\Http\JsonResponse
     {
         return response()->json([
-            User::all()
+            Category::all()
         ]);
     }
 
@@ -29,27 +29,22 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request)
     {
-        $user = User::query()->create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => $request->password
+       $category =  Category::create([
+            'name'=> $request->name,
+            'parrent_id'=> $request->parrent_id
         ]);
 
-        return response()->json([
-            'message' => 'User created successfully',
-            'status'  => 'success',
-            'token'   => $user->createToken($user->name)->plainTextToken
-        ]);
+       return response()->json($category);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(string $id)
     {
-        return $user;
+        //
     }
 
     /**
