@@ -11,11 +11,22 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json([
-            Product::all()
-        ]);
+
+        return Product::query()
+            ->when($request->category_id, function ($query) use ($request) {
+                return $query->where('category_id', $request->category_id);
+            })
+            ->when($request->order, function ($query) use ($request) {
+                return $query->orderBy("id",$request->order);
+            })
+            ->limit($request->limit)
+
+            ->get();
+//        return response()->json([
+//            Product::all()
+//        ]);
     }
 
     /**
