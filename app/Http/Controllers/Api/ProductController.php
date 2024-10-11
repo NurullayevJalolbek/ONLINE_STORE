@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductCollection;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -19,10 +20,9 @@ class ProductController extends Controller
                 return $query->where('category_id', $request->category_id);
             })
             ->when($request->order, function ($query) use ($request) {
-                return $query->orderBy("id",$request->order);
+                return $query->orderBy("id", $request->order);
             })
             ->limit($request->limit)
-
             ->get();
 //        return response()->json([
 //            Product::all()
@@ -44,13 +44,13 @@ class ProductController extends Controller
     {
         $product = Product::create([
             'name' => $request->name,
-            'description'=> $request->description,
-            'price'=>$request->price,
-            'category_id'=>$request->category_id
+            'description' => $request->description,
+            'price' => $request->price,
+            'category_id' => $request->category_id
 
         ]);
 
-        return  $product;
+        return $product;
     }
 
     /**
@@ -58,7 +58,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        return  response()->json([
+        return response()->json([
             Product::query()->findOrFail($id)
         ]);
     }
@@ -86,4 +86,14 @@ class ProductController extends Controller
     {
         //
     }
+
+    public function getCategoryProducts($id): ProductCollection
+    {
+        $product = Product::query()->where('category_id', $id)
+            ->with("category")
+            ->paginate();
+        return new ProductCollection($product);
+
+    }
+
 }

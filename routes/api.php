@@ -10,6 +10,9 @@ Route::resource('/categories', \App\Http\Controllers\Api\CategoryController::cla
 
 Route::resource('/products', \App\Http\Controllers\Api\ProductController::class)->middleware('auth:sanctum');
 
+Route::get('/category/{id}/products', [\App\Http\Controllers\Api\ProductController::class, 'getCategoryProducts'])->middleware('auth:sanctum');
+
+Route::resource('/cart', \App\Http\Controllers\Api\CartController::class)->middleware("auth:sanctum");
 
 
 
