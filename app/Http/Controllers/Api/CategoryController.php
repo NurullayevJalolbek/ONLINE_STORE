@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateCategoryRequest;
+
 
 class CategoryController extends Controller
 {
@@ -13,9 +15,8 @@ class CategoryController extends Controller
      */
     public function index(): \Illuminate\Http\JsonResponse
     {
-        return response()->json([
-            Category::all()
-        ]);
+        return response()->json(Category::all());
+
     }
 
     /**
@@ -31,7 +32,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-       $category =  Category::create([
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $category =  Category::create([
             'name'=> $request->name,
             'parrent_id'=> $request->parrent_id
         ]);
@@ -39,12 +44,17 @@ class CategoryController extends Controller
        return response()->json($category);
     }
 
+
+
+
+
+
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        return response()->json(Category::query()->findOrFail($id));
     }
 
     /**
@@ -58,10 +68,28 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        // Kiritish jarayonida
+            $request->validate([
+            'name' => 'required|string|max:255',
+            // boshqa validatsiyalar
+        ]);
+
+        $updated = $category->update([
+            'name'      => $request->name,
+            'parent_id' => $request->parent_id
+        ]);
+
+        if ($updated) {
+            return response()->json(['name' => $category->name]);
+        }
     }
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.

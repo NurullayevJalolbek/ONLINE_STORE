@@ -20,7 +20,6 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'description' => $this->faker->sentence(),
             'parent_id' => Category::query()->inRandomOrder()->first()?->id,
         ];
     }
