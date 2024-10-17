@@ -42,26 +42,34 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'category_id' => $request->category_id
-
+        $request->validate([
+            'name'        => 'required',
+            'description' => 'required',
+            'price'       => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
-        return $product;
+        $product = Product::create([
+            'name'        => $request->name,
+            'description' => $request->description,
+            'price'       => $request->price,
+            'category_id' => $request->category_id,
+        ]);
+
+        return response()->json($product, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): \Illuminate\Http\JsonResponse
     {
-        return response()->json([
-            Product::query()->findOrFail($id)
-        ]);
+        // Mahsulotni topish va uni qaytarish
+        $product = Product::query()->findOrFail($id);
+
+        return response()->json($product, 200);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -74,17 +82,28 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Product $product): \Illuminate\Http\JsonResponse
     {
-        //
+        $request->validate([
+            'name'        => 'sometimes|required',
+            'description' => 'sometimes|required',
+            'price'       => 'sometimes|required|numeric',
+            'category_id' => 'sometimes|required|exists:categories,id',
+        ]);
+
+        $product->update($request->only(['name', 'description', 'price', 'category_id']));
+
+        return response()->json($product);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product): \Illuminate\Http\JsonResponse
     {
-        //
+        $product->delete();
+
+        return response()->json([], 204);
     }
 
     public function getCategoryProducts($id): ProductCollection

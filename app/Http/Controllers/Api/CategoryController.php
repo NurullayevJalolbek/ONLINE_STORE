@@ -94,8 +94,13 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id): \Illuminate\Http\Response
     {
-        //
+        $category = Category::query()->findOrFail($id);
+        $category->delete();
+
+        return response()->noContent();
     }
+
+
 }
