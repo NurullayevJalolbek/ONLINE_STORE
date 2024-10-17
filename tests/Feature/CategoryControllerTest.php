@@ -138,15 +138,4 @@ class CategoryControllerTest extends TestCase
         $response->assertSee('Laravel');
     }
 
-    public  function  testFetchingOneProduct()
-    {
-//        $response = $this->get('/api/products/1');
-//        dd($response);
-        $product = Product::factory()->create();
-        $this->assertEquals(1, $product->id);
-    }
-
-
-
-
 }

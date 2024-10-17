@@ -19,7 +19,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word(),
+            'name' => $this->faker->unique()->word(),
             'parent_id' => Category::query()->inRandomOrder()->first()?->id,
         ];
     }
